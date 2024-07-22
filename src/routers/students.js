@@ -2,7 +2,6 @@
 
 import { Router } from 'express';
 import { validateBody } from '../middlewares/validateBody.js';
-import { createStudentSchema } from '../validation/students.js';
 import {
   getStudentsController,
   getStudentByIdController,
@@ -12,7 +11,7 @@ import {
   patchStudentController,
 } from '../controllers/students.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { updateStudentSchema } from '../validation/students.js';
+import { createStudentSchema, updateStudentSchema } from '../validation/students.js';
 import { isValidId } from '../middlewares/isValidId.js';
 
 const router = Router();
