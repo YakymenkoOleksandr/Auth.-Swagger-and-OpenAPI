@@ -1,3 +1,4 @@
+// src/server.js
 import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
@@ -14,6 +15,7 @@ export const startServer = () => {
 
   app.use(express.json());
   app.use(cors());
+  app.use(cookieParser());
 
   app.use(
     pino({
@@ -29,17 +31,18 @@ export const startServer = () => {
     });
   });
 
+  // Підключення маршрутизаторів
+  app.use(router);
+
+  // Обробка невідомих маршрутів
   app.use('*', notFoundHandler);
 
+  // Обробка помилок
   app.use(errorHandler);
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
-
-  app.use(router);
-
-  app.use(cookieParser());
 };
 
 

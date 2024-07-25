@@ -1,5 +1,3 @@
-// routers/students.js
-
 import { Router } from 'express';
 import { validateBody } from '../middlewares/validateBody.js';
 import {
@@ -19,53 +17,11 @@ import { ROLES } from '../constants/index.js';
 
 const router = Router();
 
-router.get('/students', ctrlWrapper(getStudentsController));
-
-router.get('/students/:studentId', ctrlWrapper(getStudentByIdController));
-
-router.post('/students', ctrlWrapper(createStudentController));
-
-router.delete('/students/:studentId', ctrlWrapper(deleteStudentController));
-
-router.put('/students/:studentId', ctrlWrapper(upsertStudentController));
-
-router.patch('/students/:studentId', ctrlWrapper(patchStudentController));
-
-router.post(
-  '/',
-  validateBody(createStudentSchema),
-  ctrlWrapper(createStudentController),
-);
-
-router.put(
-  '/students/:studentId',
-  validateBody(createStudentSchema),
-  ctrlWrapper(upsertStudentController),
-);
-
-router.patch(
-  '/students/:studentId',
-  validateBody(updateStudentSchema),
-  ctrlWrapper(patchStudentController),
-);
-
-router.get(
-  '/:studentId',
-  isValidId,
-  ctrlWrapper(getStudentByIdController),
-);
-
 router.use(authenticate);
-
-router.get('/', ctrlWrapper(getStudentsController));
 
 router.get('/', checkRoles(ROLES.TEACHER), ctrlWrapper(getStudentsController));
 
-router.get(
-  '/:studentId',
-  checkRoles(ROLES.TEACHER, ROLES.PARENT),
-  ctrlWrapper(getStudentByIdController),
-);
+router.get('/:studentId', isValidId, checkRoles(ROLES.TEACHER, ROLES.PARENT), ctrlWrapper(getStudentByIdController));
 
 router.post(
   '/',
@@ -76,6 +32,7 @@ router.post(
 
 router.put(
   '/:studentId',
+  isValidId,
   checkRoles(ROLES.TEACHER),
   validateBody(createStudentSchema),
   ctrlWrapper(upsertStudentController),
@@ -83,6 +40,7 @@ router.put(
 
 router.patch(
   '/:studentId',
+  isValidId,
   checkRoles(ROLES.TEACHER, ROLES.PARENT),
   validateBody(updateStudentSchema),
   ctrlWrapper(patchStudentController),
@@ -90,9 +48,9 @@ router.patch(
 
 router.delete(
   '/:studentId',
+  isValidId,
   checkRoles(ROLES.TEACHER),
   ctrlWrapper(deleteStudentController),
 );
-
 
 export default router;
